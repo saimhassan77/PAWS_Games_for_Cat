@@ -1,0 +1,147 @@
+import { Dimensions, Image, StyleSheet, Text, View } from 'react-native';
+import Animated, {
+    Extrapolation,
+    interpolate,
+    useAnimatedScrollHandler,
+    useAnimatedStyle,
+    useSharedValue,
+} from 'react-native-reanimated';
+
+// 1. Define Layout Constants
+const { height: SCREEN_HEIGHT } = Dimensions.get('window');
+const ITEM_HEIGHT = 450;
+const SPACING = 20;
+const FULL_ITEM_SIZE = ITEM_HEIGHT + SPACING * 2; 
+
+// 2. Updated Mock Data with Image URIs (Using high-quality placeholders)
+const DATA = Array.from({ length: 15 }).map((_, index) => ({
+  id: index.toString(),
+  // Alternating placeholder categories for visual variety
+  imageUri: `https://picsum.photos/id/${index + 10}/600/900`, 
+}));
+
+// 3. Individual Carousel Item Component
+const CarouselItem = ({ item, index, scrollY }) => {
+  const animatedStyle = useAnimatedStyle(() => {
+    const inputRange = [
+      (index - 1) * FULL_ITEM_SIZE, 
+      index * FULL_ITEM_SIZE,       
+      (index + 1) * FULL_ITEM_SIZE, 
+    ];
+
+    const scale = interpolate(
+      scrollY.value,
+      inputRange,
+      [0.85, 1, 0.85], // Upped slightly to 0.85 for better image presence
+      Extrapolation.CLAMP
+    );
+
+    const opacity = interpolate(
+      scrollY.value,
+      inputRange,
+      [0.6, 1, 0.6], // Upped to 0.6 so off-center images stay somewhat visible
+      Extrapolation.CLAMP
+    );
+
+    return {
+      opacity,
+      transform: [{ scale }],
+    };
+  });
+
+  return (
+    <Animated.View style={[styles.itemWrapper, animatedStyle]}>
+      <View style={styles.card}>
+        {/* Swapped Text for Image */}
+        <Image 
+          source={{ uri: item.imageUri }} 
+          style={styles.image}
+          resizeMode="cover" 
+        />
+      </View>
+    </Animated.View>
+  );
+};
+
+// 4. Main Carousel Component
+export default function HomeScreen() {
+  const scrollY = useSharedValue(0);
+
+  const scrollHandler = useAnimatedScrollHandler({
+    onScroll: (event) => {
+      scrollY.value = event.contentOffset.y;
+    },
+  });
+
+  return (
+    <View style={styles.container}>
+      <View style={styles.header}>
+        <Text style={styles.headerText}>PAWS</Text>
+        <View style={styles.premium}></View>
+      </View>
+      <Animated.FlatList
+        data={DATA}
+        keyExtractor={(item) => item.id}
+        onScroll={scrollHandler}
+        scrollEventThrottle={16} 
+        snapToInterval={FULL_ITEM_SIZE} 
+        decelerationRate="fast"
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{
+          paddingVertical: (SCREEN_HEIGHT - FULL_ITEM_SIZE) / 2,
+        }}
+        renderItem={({ item, index }) => (
+          <CarouselItem item={item} index={index} scrollY={scrollY} />
+        )}
+      />
+    </View>
+  );
+}
+
+// 5. Updated Styles
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#121212',
+  },
+  header:{
+    height:60,
+    backgroundColor:"#6B4EEA",
+    flexDirection:"row",
+    justifyContent:"space-between",
+    alignItems:"center",
+    paddingHorizontal:10
+    // borderRadius:40
+  },
+  headerText:{
+    fontSize:28,
+    fontWeight:900,
+    color:"#fff"
+  },
+  premium:{
+    width:10,
+    height:10,
+    backgroundColor:"#fff"
+  },
+  itemWrapper: {
+    height: FULL_ITEM_SIZE,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  card: {
+    width: '85%',
+    height: ITEM_HEIGHT,
+    borderRadius: 24,
+    backgroundColor: '#1e1e1e', // Fallback color while image loads
+    overflow: 'hidden', // CRITICAL: Keeps the image bound to the card's border radius
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 10 },
+    shadowOpacity: 0.4,
+    shadowRadius: 20,
+    elevation: 8, 
+  },
+  image: {
+    width: '100%',
+    height: '100%',
+  },
+});
