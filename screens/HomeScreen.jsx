@@ -18,8 +18,8 @@ const FULL_ITEM_SIZE = ITEM_HEIGHT + SPACING * 2;
 
 // 2. Updated Mock Data with Image URIs (Using high-quality placeholders)
 const DATA = [
-    { id: '1', imageurl: require('../assets/images/icon.png'), title: 'MouseGame' },
-    { id: '2', imageurl: require('../assets/cardImages/fish1.png'), title: 'FishGame' },
+    { id: '1', imageurl: require('../assets/cardImages/mouse.png'), title: 'MouseGame' },
+    { id: '2', imageurl: require('../assets/cardImages/fish.png'), title: 'FishGame' },
     { id: '3', imageurl: require('../assets/images/icon.png'), title: 'screen3' },
     { id: '4', imageurl: require('../assets/images/icon.png'), title: 'screen4' },
     { id: '5', imageurl: require('../assets/images/icon.png'), title: 'screen5' },
@@ -96,7 +96,7 @@ export default function HomeScreen({ navigation }) {
             <View style={styles.header}>
                 <Text style={styles.headerText}>PAWS</Text>
                 <TouchableOpacity style={styles.premium} onPress={() => Alert.alert("🎉Free to Use")}>
-                    <AntDesign name="crown" size={24} color="#fffb00" />
+                    <AntDesign name="crown" size={22} color="#ffff" />
                 </TouchableOpacity>
             </View>
             <Animated.FlatList
@@ -108,7 +108,7 @@ export default function HomeScreen({ navigation }) {
                 decelerationRate="fast"
                 showsVerticalScrollIndicator={false}
                 contentContainerStyle={{
-                    paddingVertical: (SCREEN_HEIGHT - FULL_ITEM_SIZE) / 3.5,
+                    paddingVertical: (SCREEN_HEIGHT - FULL_ITEM_SIZE) / 4.5,
                 }}
                 renderItem={({ item, index }) => (
                     <CarouselItem item={item} index={index} scrollY={scrollY} navigation={navigation} />
@@ -122,33 +122,38 @@ export default function HomeScreen({ navigation }) {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#121212',
+        backgroundColor: '#f1f1f1', // Light background for better contrast with cards
     },
     header: {
         width: '90%',
         marginLeft: '5%',
+        marginTop: 15,
         height: 60,
         borderRadius: 50,
-        backgroundColor: "#6B4EEA",
+        backgroundColor: "#f1f1f1",//#6B4EEA
         flexDirection: "row",
         justifyContent: "space-between",
         alignItems: "center",
         paddingHorizontal: 20,
+         shadowColor: '#000',
+        shadowOffset: { width: 0, height: 10 },
+        shadowOpacity: 0.4,
+        shadowRadius: 24,
     },
     headerText: {
         fontFamily: "sans-serif",
         fontStyle: "italic",
         fontSize: 28,
         fontWeight: 900,
-        color: "#fff"
+        color: "#000"
     },
     premium: {
-        width: 35,
-        height: 35,
+        width: 40,
+        height: 40,
         alignItems: "center",
         justifyContent: "center",
-        borderRadius: 15,
-        backgroundColor: "#fff"
+        borderRadius: 18,
+        backgroundColor: "#000"
     },
     itemWrapper: {
         height: FULL_ITEM_SIZE,
