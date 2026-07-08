@@ -96,8 +96,8 @@ export default function HomeScreen({ navigation }) {
             <ImageBackground source={require('../assets/images/background.png')} style={styles.imageb} resizeMode="cover">
                 <View style={styles.header}>
                     <View style={{ flexDirection: "row", alignItems: "center" }}>
-                        <Image source={require('../assets/images/i.png')} style={styles.logo} style={{ width: 40, height: 40 }} />
-                        <Text style={styles.headerText}>PAW</Text>
+                        <Image source={require('../assets/images/ii.png')} style={styles.logo} style={{ width: 57, height: 57 }} />
+                        <Text style={styles.headerText}>Paws</Text>
                     </View>
                     <TouchableOpacity style={styles.premium} onPress={() => Alert.alert("🎉Free to Use")}>
                         <AntDesign name="crown" size={22} color="#ffff" />
@@ -148,19 +148,19 @@ const styles = StyleSheet.create({
 
     },
     headerText: {
-        fontFamily: "sans-serif",
-        // fontStyle: "italic",
+        fontFamily: "DMSans",
+        fontStyle: "italic",
         fontSize: 24,
         fontWeight: 900,
-        color: "#000"
+        color: "#6B4EEA"
     },
     premium: {
-        width: 40,
-        height: 40,
+        width: 42,
+        height: 42,
         alignItems: "center",
         justifyContent: "center",
         borderRadius: 18,
-        backgroundColor: "#000"
+        backgroundColor: "#6B4EEA"
     },
     itemWrapper: {
         height: FULL_ITEM_SIZE,
