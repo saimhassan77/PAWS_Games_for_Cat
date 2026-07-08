@@ -93,7 +93,7 @@ export default function HomeScreen({ navigation }) {
 
     return (
         <SafeAreaView style={styles.container}>
-            <ImageBackground source={require('../assets/images/background.png')} style={styles.imageb} resizeMode="cover">
+            <ImageBackground source={require('../assets/images/bg1.jpeg')} style={styles.imageb} resizeMode="cover">
                 <View style={styles.header}>
                     <View style={{ flexDirection: "row", alignItems: "center" }}>
                         <Image source={require('../assets/images/ii.png')} style={styles.logo} style={{ width: 57, height: 57 }} />
@@ -160,7 +160,8 @@ const styles = StyleSheet.create({
         alignItems: "center",
         justifyContent: "center",
         borderRadius: 18,
-        backgroundColor: "#6B4EEA"
+        backgroundColor: "#6B4EEA",
+        elevation: 8,
     },
     itemWrapper: {
         height: FULL_ITEM_SIZE,
