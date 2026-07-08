@@ -1,6 +1,6 @@
 import AntDesign from '@expo/vector-icons/AntDesign';
 import { router } from "expo-router";
-import { Alert, Dimensions, Image, Pressable, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Alert, Dimensions, Image, ImageBackground, Pressable, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import Animated, {
     Extrapolation,
     interpolate,
@@ -93,27 +93,32 @@ export default function HomeScreen({ navigation }) {
 
     return (
         <SafeAreaView style={styles.container}>
-            <View style={styles.header}>
-                <Text style={styles.headerText}>PAWS</Text>
-                <TouchableOpacity style={styles.premium} onPress={() => Alert.alert("🎉Free to Use")}>
-                    <AntDesign name="crown" size={22} color="#ffff" />
-                </TouchableOpacity>
-            </View>
-            <Animated.FlatList
-                data={DATA}
-                keyExtractor={(item) => item.id}
-                onScroll={scrollHandler}
-                scrollEventThrottle={16}
-                snapToInterval={FULL_ITEM_SIZE}
-                decelerationRate="fast"
-                showsVerticalScrollIndicator={false}
-                contentContainerStyle={{
-                    paddingVertical: (SCREEN_HEIGHT - FULL_ITEM_SIZE) / 4.5,
-                }}
-                renderItem={({ item, index }) => (
-                    <CarouselItem item={item} index={index} scrollY={scrollY} navigation={navigation} />
-                )}
-            />
+            <ImageBackground source={require('../assets/images/background.png')} style={styles.imageb} resizeMode="cover">
+                <View style={styles.header}>
+                    <View style={{ flexDirection: "row", alignItems: "center" }}>
+                        <Image source={require('../assets/images/i.png')} style={styles.logo} style={{ width: 40, height: 40 }} />
+                        <Text style={styles.headerText}>PAW</Text>
+                    </View>
+                    <TouchableOpacity style={styles.premium} onPress={() => Alert.alert("🎉Free to Use")}>
+                        <AntDesign name="crown" size={22} color="#ffff" />
+                    </TouchableOpacity>
+                </View>
+                <Animated.FlatList
+                    data={DATA}
+                    keyExtractor={(item) => item.id}
+                    onScroll={scrollHandler}
+                    scrollEventThrottle={16}
+                    snapToInterval={FULL_ITEM_SIZE}
+                    decelerationRate="fast"
+                    showsVerticalScrollIndicator={false}
+                    contentContainerStyle={{
+                        paddingVertical: (SCREEN_HEIGHT - FULL_ITEM_SIZE) / 4.5,
+                    }}
+                    renderItem={({ item, index }) => (
+                        <CarouselItem item={item} index={index} scrollY={scrollY} navigation={navigation} />
+                    )}
+                />
+            </ImageBackground>
         </SafeAreaView>
     );
 }
@@ -135,15 +140,17 @@ const styles = StyleSheet.create({
         justifyContent: "space-between",
         alignItems: "center",
         paddingHorizontal: 20,
-         shadowColor: '#000',
+        shadowColor: '#000',
         shadowOffset: { width: 0, height: 10 },
         shadowOpacity: 0.4,
         shadowRadius: 24,
+        elevation: 8,
+
     },
     headerText: {
         fontFamily: "sans-serif",
-        fontStyle: "italic",
-        fontSize: 28,
+        // fontStyle: "italic",
+        fontSize: 24,
         fontWeight: 900,
         color: "#000"
     },
@@ -184,5 +191,9 @@ const styles = StyleSheet.create({
         position: "absolute",
         bottom: 25,
         right: 25,
-    }
+    },
+    imageb: {
+        flex: 1,
+        justifyContent: 'center',
+    },
 });
