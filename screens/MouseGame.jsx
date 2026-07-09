@@ -15,6 +15,7 @@ import {
   TouchableWithoutFeedback,
   View
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const { width, height } = Dimensions.get('window');
 
@@ -348,7 +349,7 @@ export default function App() {
 
 
   return (
-    <View style={[styles.container, { backgroundColor: theme.bg }]}>
+    <SafeAreaView style={[styles.container, { backgroundColor: theme.bg }]}>
       <ImageBackground  source={require('../assets/images/bg1.jpeg')} style={styles.imageb} resizeMode="cover">
       
       {/* --- Gameplay Area --- */}
@@ -500,7 +501,7 @@ export default function App() {
         </View>
       </Modal>
 </ImageBackground>
-    </View>
+    </SafeAreaView>
   );
 }
 

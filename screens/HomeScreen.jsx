@@ -20,9 +20,9 @@ const FULL_ITEM_SIZE = ITEM_HEIGHT + SPACING * 2;
 const DATA = [
     { id: '1', imageurl: require('../assets/cardImages/mouse.png'), title: 'MouseGame' },
     { id: '2', imageurl: require('../assets/cardImages/fish.png'), title: 'FishGame' },
-    { id: '3', imageurl: require('../assets/images/icon.png'), title: 'screen3' },
-    { id: '4', imageurl: require('../assets/images/icon.png'), title: 'screen4' },
-    { id: '5', imageurl: require('../assets/images/icon.png'), title: 'screen5' },
+    { id: '3', imageurl: require('../assets/images/bb.jpeg'), title: 'BeetleGame' },
+    { id: '4', imageurl: require('../assets/images/icon.png'), title: 'BolGame' },
+    { id: '5', imageurl: require('../assets/images/icon.png'), title: 'BeetlesGame' },
 ]
 // const DATA = Array.from({ length: 15 }).map((_, index) => ({
 //   id: index.toString(),
