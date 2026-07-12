@@ -1,14 +1,14 @@
 import { useEffect, useRef, useState } from 'react';
 import {
-    Animated,
-    Dimensions,
-    Easing,
-    StatusBar,
-    StyleSheet,
-    Text,
-    TouchableWithoutFeedback,
-    Vibration,
-    View
+  Animated,
+  Dimensions,
+  Easing,
+  StatusBar,
+  StyleSheet,
+  Text,
+  TouchableWithoutFeedback,
+  Vibration,
+  View
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 

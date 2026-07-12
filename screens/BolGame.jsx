@@ -1,124 +1,216 @@
 import { useEffect, useRef, useState } from 'react';
 import {
-    Animated,
-    Dimensions,
-    StatusBar,
-    StyleSheet,
-    Text,
-    TouchableWithoutFeedback,
-    View
+  Animated,
+  Dimensions,
+  Easing,
+  Image,
+  ImageBackground,
+  StatusBar,
+  StyleSheet,
+  TouchableWithoutFeedback,
+  Vibration,
+  View
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const { width, height } = Dimensions.get('window');
-const BALL_SIZE = 90; // Large enough for a cat's paw
+const BEETLE_SIZE = 120;
+const NUM_BEETLES = 3;
 
-export default function BolGame() {
-  // Animation Values
-  const position = useRef(new Animated.ValueXY({ 
-    x: width / 2 - BALL_SIZE / 2, 
-    y: height / 2 - BALL_SIZE / 2 
-  })).current;
-  const scale = useRef(new Animated.Value(1)).current;
-  
-  // State
-  const [score, setScore] = useState(0);
-  const [color, setColor] = useState('#FFD700'); // Start with Yellow (Cats see yellow well)
+export default function App() {
+    const [score, setScore] = useState(0);
 
-  // Function to move the ball to a random position
-  const moveBall = () => {
-    // Keep ball within screen bounds
-    const randomX = Math.random() * (width - BALL_SIZE);
-    const randomY = Math.random() * (height - BALL_SIZE - 100) + 50; 
+    // Animation value for the score text pulsing effect
+    const scoreScale = useRef(new Animated.Value(1)).current;
 
-    Animated.parallel([
-      Animated.spring(position, {
-        toValue: { x: randomX, y: randomY },
-        friction: 4, // Bouncy movement triggers prey drive
-        tension: 20,
-        useNativeDriver: true,
-      }),
-      // Micro-interaction: The Squish effect on movement
-      Animated.sequence([
-        Animated.timing(scale, { toValue: 0.7, duration: 100, useNativeDriver: true }),
-        Animated.timing(scale, { toValue: 1, duration: 150, useNativeDriver: true })
-      ])
-    ]).start();
-  };
+    // Added 'scale' and 'rotation' to each beetle's state
+    const beetles = useRef(
+        Array.from({ length: NUM_BEETLES }).map((_, index) => ({
+            id: index,
+            position: new Animated.ValueXY({
+                x: Math.random() * (width - BEETLE_SIZE),
+                y: Math.random() * (height - BEETLE_SIZE)
+            }),
+            scale: new Animated.Value(1),
+            rotation: new Animated.Value(0),
+        }))
+    ).current;
 
-  // Handle the cat's paw tap
-  const handleCatch = () => {
-    setScore(prev => prev + 1);
+    useEffect(() => {
+        beetles.forEach(beetle => {
+            moveBeetle(beetle);
+            startWiggle(beetle);
+        });
 
-    // Micro-interaction: Shift to a new cat-friendly color
-    const catColors = ['#0000FF', '#FFD700', '#00FFFF', '#32CD32', '#FFFFFF'];
-    setColor(catColors[Math.floor(Math.random() * catColors.length)]);
+        return () => {
+            beetles.forEach(beetle => {
+                beetle.position.stopAnimation();
+                beetle.rotation.stopAnimation();
+                beetle.scale.stopAnimation();
+            });
+        };
+    }, []);
 
-    moveBall();
-  };
+    const startWiggle = (beetle) => {
+        // Micro-interaction: Continuous organic wiggling
+        Animated.loop(
+            Animated.sequence([
+                Animated.timing(beetle.rotation, {
+                    toValue: 1,
+                    duration: 60,
+                    useNativeDriver: true,
+                }),
+                Animated.timing(beetle.rotation, {
+                    toValue: -1,
+                    duration: 60,
+                    useNativeDriver: true,
+                })
+            ])
+        ).start();
+    };
 
-  // Auto-move to keep the cat interested if they stop playing
-  useEffect(() => {
-    const interval = setInterval(() => {
-      moveBall();
-    }, 2500); 
-    
-    return () => clearInterval(interval);
-  }, []);
+    const moveBeetle = (beetle) => {
+        const randomX = Math.random() * (width - BEETLE_SIZE);
+        const randomY = Math.random() * (height - BEETLE_SIZE);
+        const randomDuration = 400 + Math.random() * 900;
 
-  return (
-    <View style={styles.container}>
-      <StatusBar hidden={true} />
-      
-      {/* Optional: Score for the human to track */}
-      <Text style={styles.scoreText}>Cat Score: {score}</Text>
-      
-      <Animated.View
-        style={[
-          styles.ball,
-          { backgroundColor: color },
-          {
-            transform: [
-              { translateX: position.x },
-              { translateY: position.y },
-              { scale: scale }
-            ]
-          }
-        ]}
-      >
-        <TouchableWithoutFeedback onPress={handleCatch}>
-          <View style={styles.touchArea} />
-        </TouchableWithoutFeedback>
-      </Animated.View>
-    </View>
-  );
+        Animated.timing(beetle.position, {
+            toValue: { x: randomX, y: randomY },
+            duration: randomDuration,
+            easing: Easing.out(Easing.quad),
+            useNativeDriver: true,
+        }).start(({ finished }) => {
+            if (finished) {
+                moveBeetle(beetle);
+            }
+        });
+    };
+
+    const catchBeetle = (beetle) => {
+        // 1. Stop movement
+        beetle.position.stopAnimation();
+
+        // 2. Micro-interaction: Haptic vibration 
+        Vibration.vibrate(40);
+
+        // 3. Update Score & animate the score text
+        setScore(prev => prev + 1);
+        Animated.sequence([
+            Animated.timing(scoreScale, { toValue: 1.3, duration: 100, useNativeDriver: true }),
+            Animated.timing(scoreScale, { toValue: 1, duration: 100, useNativeDriver: true })
+        ]).start();
+
+        // 4. Effect: "Squish" and fade out the bug
+        Animated.timing(beetle.scale, {
+            toValue: 0,
+            duration: 150,
+            easing: Easing.out(Easing.ease),
+            useNativeDriver: true
+        }).start(() => {
+            // 5. Teleport while invisible
+            const spawnX = Math.random() * (width - BEETLE_SIZE);
+            const spawnY = Math.random() * (height - BEETLE_SIZE);
+            beetle.position.setValue({ x: spawnX, y: spawnY });
+
+            // 6. Scale back up ("Respawn")
+            Animated.timing(beetle.scale, {
+                toValue: 1,
+                duration: 5000,
+                easing: Easing.bounce, // Little pop effect on respawn
+                useNativeDriver: true
+            }).start();
+
+            // 7. Resume movement
+            moveBeetle(beetle);
+        });
+    };
+
+    return (
+        <ImageBackground source={require('../assets/images/web.jpg')} style={styles.imageb} resizeMode="cover">
+        <SafeAreaView style={styles.container}>
+
+            <StatusBar hidden={true} />
+
+            {/* Animated Score Text */}
+            <Animated.Text style={[
+                styles.scoreText,
+                { transform: [{ scale: scoreScale }] }
+            ]}>
+                Flies Caught: {score}
+            </Animated.Text>
+
+            {beetles.map((beetle) => {
+                // Interpolate the rotation value into degrees
+                const spin = beetle.rotation.interpolate({
+                    inputRange: [-1, 1],
+                    outputRange: ['-15deg', '15deg']
+                });
+
+                return (
+
+                    <Animated.View
+                        key={beetle.id}
+                        style={[
+                            styles.beetleContainer,
+                            {
+                                transform: [
+                                    { translateX: beetle.position.x },
+                                    { translateY: beetle.position.y },
+                                    { scale: beetle.scale },
+                                    { rotate: spin }
+                                ]
+                            }
+                        ]}
+                    >
+                    
+                        <TouchableWithoutFeedback onPress={() => catchBeetle(beetle)}>
+                            <View style={styles.hitbox}>
+                                {/* <Text style={styles.beetle}>🐝</Text> */}
+                                <Image source={require('../assets/images/flies.png')} style={styles.beetle} />
+                            </View>
+                        </TouchableWithoutFeedback>
+                    
+                        </Animated.View>
+
+    );
+})}
+            
+        </SafeAreaView >
+        </ImageBackground>
+    );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#000000', // Pitch black for maximum contrast
-  },
-  scoreText: {
-    color: '#333', // Dimmed so it doesn't distract the cat
-    fontSize: 24,
-    marginTop: 50,
-    textAlign: 'center',
-    fontWeight: 'bold',
-  },
-  ball: {
-    width: BALL_SIZE,
-    height: BALL_SIZE,
-    borderRadius: BALL_SIZE / 2,
-    position: 'absolute',
-    // Glow effect to catch attention
-    shadowColor: '#FFF',
-    shadowOffset: { width: 0, height: 0 },
-    shadowOpacity: 0.8,
-    shadowRadius: 10,
-    elevation: 10, // For Android shadow
-  },
-  touchArea: {
-    width: '100%',
-    height: '100%',
-  }
+    container: {
+        flex: 1,
+        // backgroundColor: '#050505',
+        overflow: 'hidden',
+    },
+    scoreText: {
+        color: '#f1f1f1',
+        fontSize: 22,
+        fontWeight: 'bold',
+        marginTop: 40,
+        textAlign: 'center',
+        zIndex: 10,
+    },
+    beetleContainer: {
+        position: 'absolute',
+        width: BEETLE_SIZE,
+        height: BEETLE_SIZE,
+    },
+    hitbox: {
+        width: '100%',
+        height: '100%',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    beetle: {
+        width:110,
+        height:110,
+    },
+    imageb: {
+        flex: 1,
+        justifyContent: 'center',
+    },
 });

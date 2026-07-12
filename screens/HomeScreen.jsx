@@ -18,11 +18,11 @@ const FULL_ITEM_SIZE = ITEM_HEIGHT + SPACING * 2;
 
 // 2. Updated Mock Data with Image URIs (Using high-quality placeholders)
 const DATA = [
-    { id: '1', imageurl: require('../assets/cardImages/mouse.png'), title: 'MouseGame' },
-    { id: '2', imageurl: require('../assets/cardImages/fish.png'), title: 'FishGame' },
-    { id: '3', imageurl: require('../assets/images/bb.jpeg'), title: 'BeetleGame' },
-    { id: '4', imageurl: require('../assets/images/icon.png'), title: 'BolGame' },
-    { id: '5', imageurl: require('../assets/images/icon.png'), title: 'BeetlesGame' },
+    { id: '1', imageurl: require('../assets/cardImages/1.png'), title: 'MouseGame' },
+    { id: '2', imageurl: require('../assets/cardImages/2.png'), title: 'FishGame' },
+    { id: '3', imageurl: require('../assets/cardImages/3.png'), title: 'BeetleGame' },
+    { id: '4', imageurl: require('../assets/cardImages/4.png'), title: 'BolGame' },
+    { id: '5', imageurl: require('../assets/cardImages/5.png'), title: 'SpiderGame' },
 ]
 // const DATA = Array.from({ length: 15 }).map((_, index) => ({
 //   id: index.toString(),
@@ -71,11 +71,11 @@ const CarouselItem = ({ item, index, scrollY, navigation }) => {
                     style={styles.image}
                     resizeMode="cover"
                 />
-                <Image
+                {/* <Image
                     source={require('../assets/images/playButton.png')}
                     style={styles.playButton}
                     resizeMode="cover"
-                />
+                /> */}
             </Pressable>
         </Animated.View>
     );
@@ -93,7 +93,7 @@ export default function HomeScreen({ navigation }) {
 
     return (
         <SafeAreaView style={styles.container}>
-            <ImageBackground source={require('../assets/images/bg1.jpeg')} style={styles.imageb} resizeMode="cover">
+            <ImageBackground source={require('../assets/images/bg2.jpeg')} style={styles.imageb} resizeMode="cover">
                 <View style={styles.header}>
                     <View style={{ flexDirection: "row", alignItems: "center" }}>
                         <Image source={require('../assets/images/ii.png')} style={styles.logo} style={{ width: 57, height: 57 }} />

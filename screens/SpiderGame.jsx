@@ -205,7 +205,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     beetle: {
-        fontSize: 55,
+        fontSize: 110,
     },
     imageb: {
         flex: 1,
