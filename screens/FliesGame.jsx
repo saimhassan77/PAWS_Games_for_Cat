@@ -126,7 +126,7 @@ export default function App() {
     };
 
     return (
-        <ImageBackground source={require('../assets/images/web.jpg')} style={styles.imageb} resizeMode="cover">
+        <ImageBackground source={require('../assets/images/fliesBG.png')} style={styles.imageb} resizeMode="cover">
         <SafeAreaView style={styles.container}>
 
             <StatusBar hidden={true} />
@@ -187,7 +187,7 @@ const styles = StyleSheet.create({
         overflow: 'hidden',
     },
     scoreText: {
-        color: '#f1f1f1',
+        color: '#000',
         fontSize: 22,
         fontWeight: 'bold',
         marginTop: 40,

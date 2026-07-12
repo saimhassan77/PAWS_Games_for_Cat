@@ -7,7 +7,7 @@ export default function RootLayout() {
       <Stack.Screen name="MouseGame" />
       <Stack.Screen name="FishGame" />
       <Stack.Screen name="BeetleGame" />
-      <Stack.Screen name="BolGame" />
+      <Stack.Screen name="FliesGame" />
       <Stack.Screen name="SpiderGame" />
     </Stack>
   );

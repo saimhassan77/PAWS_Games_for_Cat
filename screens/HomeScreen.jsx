@@ -21,7 +21,7 @@ const DATA = [
     { id: '1', imageurl: require('../assets/cardImages/1.png'), title: 'MouseGame' },
     { id: '2', imageurl: require('../assets/cardImages/2.png'), title: 'FishGame' },
     { id: '3', imageurl: require('../assets/cardImages/3.png'), title: 'BeetleGame' },
-    { id: '4', imageurl: require('../assets/cardImages/4.png'), title: 'BolGame' },
+    { id: '4', imageurl: require('../assets/cardImages/4.png'), title: 'FliesGame' },
     { id: '5', imageurl: require('../assets/cardImages/5.png'), title: 'SpiderGame' },
 ]
 // const DATA = Array.from({ length: 15 }).map((_, index) => ({
