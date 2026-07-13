@@ -9,6 +9,7 @@ export default function RootLayout() {
       <Stack.Screen name="BeetleGame" />
       <Stack.Screen name="FliesGame" />
       <Stack.Screen name="SpiderGame" />
+      <Stack.Screen name="PaywallScreen" />
     </Stack>
   );
 }

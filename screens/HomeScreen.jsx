@@ -1,6 +1,6 @@
 import AntDesign from '@expo/vector-icons/AntDesign';
 import { router } from "expo-router";
-import { Alert, Dimensions, Image, ImageBackground, Pressable, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Dimensions, Image, ImageBackground, Pressable, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import Animated, {
     Extrapolation,
     interpolate,
@@ -99,7 +99,7 @@ export default function HomeScreen({ navigation }) {
                         <Image source={require('../assets/images/ii.png')} style={styles.logo} style={{ width: 57, height: 57 }} />
                         <Text style={styles.headerText}>Paws</Text>
                     </View>
-                    <TouchableOpacity style={styles.premium} onPress={() => Alert.alert("🎉Free to Use")}>
+                    <TouchableOpacity style={styles.premium} onPress={() => router.push("/PaywallScreen")}>
                         <AntDesign name="crown" size={22} color="#ffff" />
                     </TouchableOpacity>
                 </View>
