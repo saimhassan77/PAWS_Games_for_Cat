@@ -1,15 +1,16 @@
 import { Ionicons } from '@expo/vector-icons';
 import { router } from "expo-router";
 import {
-    Image,
-    Platform,
-    SafeAreaView,
-    StatusBar,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View
+  Image,
+  Platform,
+  SafeAreaView,
+  StatusBar,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View
 } from 'react-native';
+import Purchases from "react-native-purchases";
 
 export default function PaywallScreen({ navigation }) {
   // Mock go-back function if navigation prop isn't passed
@@ -17,16 +18,40 @@ export default function PaywallScreen({ navigation }) {
     router.back("/");
   };
 
-  const handleSubscribe = () => {
-    console.log("Subscribe for $4.99 pressed");
+
+
+  const buyMonthly = async () => {
+    try {
+      const offerings = await Purchases.getOfferings();
+
+      const monthlyPackage = offerings.current?.monthly;
+
+      if (!monthlyPackage) {
+        alert("Monthly subscription not found");
+        return;
+      }
+
+      const { customerInfo } =
+        await Purchases.purchasePackage(monthlyPackage);
+
+      if (customerInfo.entitlements.active["premium"]) {
+        alert("Premium Activated 🎉");
+        // Home ya Premium screen par navigate karo
+      }
+    } catch (e) {
+      if (!e.userCancelled) {
+        console.log(e);
+        alert("Purchase failed");
+      }
+    }
   };
 
   return (
     <SafeAreaView style={styles.container}>
       {/* Header / Go Back Icon */}
       <View style={styles.header}>
-        <TouchableOpacity 
-          onPress={handleGoBack} 
+        <TouchableOpacity
+          onPress={handleGoBack}
           style={styles.backButton}
           activeOpacity={0.7}
         >
@@ -40,7 +65,7 @@ export default function PaywallScreen({ navigation }) {
           {/* <Ionicons name="star" size={60} color="#FFD700" /> */}
           <Image source={require('../assets/images/icon.png')} style={styles.icon} resizeMode='cover' />
         </View>
-        
+
         <Text style={styles.title}>Unlock Premium</Text>
         <Text style={styles.subtitle}>
           Get unlimited access to all features, remove ads, and support development.
@@ -61,14 +86,14 @@ export default function PaywallScreen({ navigation }) {
 
       {/* Call to Action Button */}
       <View style={styles.footer}>
-        <TouchableOpacity 
-          style={styles.subscribeButton} 
-          onPress={handleSubscribe}
+        <TouchableOpacity
+          style={styles.subscribeButton}
+          onPress={buyMonthly}
           activeOpacity={0.8}
         >
           <Text style={styles.subscribeButtonText}>Subscribe Now</Text>
         </TouchableOpacity>
-        
+
         <Text style={styles.legalText}>
           Auto-renewable. Cancel anytime in your device settings.
         </Text>
