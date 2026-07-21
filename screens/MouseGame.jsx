@@ -350,7 +350,7 @@ export default function App() {
 
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: theme.bg }]}>
-      <ImageBackground  source={require('../assets/images/bg1.jpeg')} style={styles.imageb} resizeMode="cover">
+      <ImageBackground  source={require('../assets/images/bg2.jpeg')} style={styles.imageb} resizeMode="cover">
       
       {/* --- Gameplay Area --- */}
       <TouchableWithoutFeedback onPress={() => { /* Missed tap */ }}>
